@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+    <script src="/socket.io/socket.io.js" defer></script>
+    <script src="script.js" defer></script>
+    <title>Home</title>
+</head>
+<body>
+    <form action="/join">
+        <input id="callInput" name="callInput"/>
+        <button id="joinRoom" type="submit">Join Room</button>
+    </form>
+    <a href="/create"><button id="createRoom">Create Room</button></a>
+</body>
+<script>
+    const callInput =  document.getElementById('callInput')
+    const joinRoom = document.getElementById('joinRoom')
+
+    joinRoom.addEventListener('click', function(e){
+        e.preventDefault()
+        window.location.replace(callInput.value)
+    })
+</script>
+</html>
