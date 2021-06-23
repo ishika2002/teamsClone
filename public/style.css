@@ -1,14 +1,107 @@
-#video-grid {
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body{
+    min-height: 50vh;
+    background: #343F4F;
+}
+
+.header {
+    overflow: hidden;
+    background-color: #FC6D6D;
+    position: fixed; /* Set the navbar to fixed position */
+    top: 0;
+    height: 50px; /* Position the navbar at the top of the page */
+    width: 100%; /* Full width */
     display: flex;
     justify-content: center;
+    align-items: center;
+}
+
+.header button{
+    display: inline;
+    margin: 0 10px 0 10px;
+    height: 30px;
+    width: 200px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.footer {
+    overflow: hidden;
+    background-color: #FC6D6D;
+    position: fixed; /* Set the navbar to fixed position */
+    bottom: 0;
+    height: 50px; /* Position the navbar at the top of the page */
+    width: 100%; /* Full width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer button{
+    display: inline;
+    margin: 0 10px 0 10px;
+    height: 30px;
+    width: 200px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#video-grid {
+    display: flex;
+    position: relative;
+    top: 100px;
+    justify-content: center;
+    align-items: center;
 }
 
 video {
-    height: 300px;
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    margin: 10px 10px 10px 10px;
+    
+}
+
+.fullScreen{
+    width: 100%;
+    height: 100%;
+}
+
+/*layout adjustment*/
+.two{
+    height: 400px;
     width: 400px;
     object-fit: cover;
     margin: 10px 10px 10px 10px;
-    transform: rotateY(180deg);
-  -webkit-transform:rotateY(180deg); /* Safari and Chrome */
-  -moz-transform:rotateY(180deg); /* Firefox */
+    
+}
+
+.four{
+    height: 200px;
+    width: 200px;
+    object-fit: cover;
+    margin: 10px 10px 10px 10px;
+    
+}
+
+.six{
+    height: 100px;
+    width: 100px;
+    object-fit: cover;
+    margin: 10px 10px 10px 10px;
+    
+}
+
+.eight{
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
+    margin: 10px 10px 10px 10px;
+    
 }

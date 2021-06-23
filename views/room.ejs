@@ -11,14 +11,27 @@
     <script src="/socket.io/socket.io.js" defer></script>
     <script src="script.js" defer></script>
     <title>Clone</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="header">
+        <input value="<%= roomId%>" id="meetingId" hidden/>
+        <button onclick="copy()">Copy Meeting ID</button>
+        <button onclick="share()">Copy Meeting Link</button>
+        <button id="disconnect">Leave</button>
+    </div>
     <div id="video-grid"></div>
-    <button id="muteUnmute">Mute</button>
-    <button id="playStop">Video Off</button>
-    <h1>Share the below room ID</h1>
-    <input value="<%= roomId%>"/>
-    <button id="disconnect">Leave</button>
+    <div class="footer">
+        <button id="muteUnmute">Mute</button>
+        <button id="playStop">Video Off</button>
+        <button onclick="screenshare()">Share Screen</button>
+    </div>
+    <!-- <h1>Share the below room ID</h1> -->
+    <!-- <input value="<%= roomId%>" id="meetingId"/> -->
+
+    <!-- <video id="gum-local" autoplay playsinline muted></video> -->
+    <!-- <div id="share"></div>
+    <button id="startButton">Start</button> -->
 </body>
 </html>

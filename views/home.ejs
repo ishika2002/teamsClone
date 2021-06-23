@@ -8,13 +8,34 @@
     <script src="/socket.io/socket.io.js" defer></script>
     <script src="script.js" defer></script>
     <title>Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" href="home.css">
 </head>
 <body>
-    <form action="/join">
-        <input id="callInput" name="callInput"/>
-        <button id="joinRoom" type="submit">Join Room</button>
-    </form>
-    <a href="/create"><button id="createRoom">Create Room</button></a>
+    <!--test-->
+    <div class="wrapper">
+        <div class="static-txt">One place for</div>
+        <ul class="dynamic-txt">
+            <li><span>Calls</span></li>
+            <li><span>Events</span></li>
+            <li><span>Meetings</span></li>
+            <li><span>Collaborations</span></li>
+        </ul>
+    </div>
+    <!--test-->
+    <div class="container"> 
+        <div class="instantMeet">     
+            <h5>Start Instant Meeting</h5>
+            <a href="/create"><button class="btn btn-dark" id="createRoom">Create Room</button></a>  
+        </div>
+        <div class="meetingCode">
+            <h5>Enter Meeting Code</h5>
+            <form action="/join" class="input_form">
+                <input id="callInput" name="callInput"/>
+                <button class="btn btn-dark" id="joinRoom" type="submit">Join Room</button>
+            </form>
+        </div>
+    </div>
 </body>
 <script>
     const callInput =  document.getElementById('callInput')
