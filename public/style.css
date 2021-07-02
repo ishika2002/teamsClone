@@ -12,7 +12,7 @@ body{
 
 .header {
     overflow: hidden;
-    background-color: #FC6D6D;
+    background-color: #000000;
     position: fixed; /* Set the navbar to fixed position */
     top: 0;
     height: 50px; /* Position the navbar at the top of the page */
@@ -33,7 +33,7 @@ body{
 
 .footer {
     overflow: hidden;
-    background-color: #FC6D6D;
+    background-color: #000000;
     position: fixed; /* Set the navbar to fixed position */
     bottom: 0;
     height: 50px; /* Position the navbar at the top of the page */
@@ -61,11 +61,12 @@ body{
 }
 
 video {
-    height: 100%;
-    width: 100%;
+    /* height: 100%;
+    width: 100%; */
+    height: 300px;
+    width: 400px;
     object-fit: contain;
     margin: 10px 10px 10px 10px;
-    
 }
 
 .fullScreen{
@@ -104,4 +105,10 @@ video {
     object-fit: cover;
     margin: 10px 10px 10px 10px;
     
+}
+
+.userName{
+    color: white;
+    position: absolute;
+    top:10px;
 }

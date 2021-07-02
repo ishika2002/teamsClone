@@ -19,7 +19,7 @@ let cUser;
 //test
 
 // //enter name
-// let YourName = prompt('Type Your Name');
+let myName = prompt('Type Your Name');
 // // let bar = confirm('Confirm or deny');
 // console.log(YourName);
 
@@ -28,32 +28,57 @@ navigator.mediaDevices.getUserMedia({
     audio: true
 }).then(stream => {
     myVideoStream = stream
-    addVideoStream(localVideo, stream)
+    addVideoStream(localVideo, "Me", stream)
 
     peer.on('call', call => {
         call.answer(stream)
+        let myId = call.peer;
         const video = document.createElement('video')
-        call.on('stream', userVideoStream => {
-            addVideoStream(video, userVideoStream)
-        })
+        socket.emit('seruI')
+        socket.on('all_users_inRoom', userList => {
+            userList.forEach(e => {
+                if(e.userId == myId){
+                    call.on('stream', userVideoStream => {
+                        addVideoStream(video, e.name, userVideoStream)
+                    })
+                }
+            });
+        });
         currentPeer.push(call.peerConnection);
         console.log(call.peerConnection) //test
+        //test2
+    })
+    
+    //code for appending participants
+    socket.emit('participants')
+    socket.on('participant-list', users =>{
+        removeAll()
+        users.forEach(e => {
+            appendParticipant(e.name)
+        })
+        console.log(users)
     })
 
-    socket.on('user-connected', userId => {
+    socket.on('user-connected', (userId, name) => {
         setTimeout(() => {
-            connectToNewUser(userId, stream)
-            count++
-            console.log(count)
-            adjust(count)
+            connectToNewUser(userId, name, stream)
         }, 1000)
+        // count++
+        console.log(name)
+        console.log(count)
+        // adjust(count)
         console.log('user connected: ' + userId)
     })
 })
 
-socket.on('user-disconnected', userId => {
-    if (peers[userId]) peers[userId].close()
-    console.log('user disconnected: ', userId)
+socket.on('user-disconnected', user => {
+    if (peers[user.userId]) peers[user.userId].close()
+    console.log('user disconnected: ', user.userId)
+    const left = document.getElementById(`${user.name}`)
+    left.parentNode.removeChild(left);
+    // left.querySelectorAll('*').forEach(n => n.remove());
+    // const user = document.getElementById(name)
+    // user.remove()
     count--
     console.log(count)
     adjust(count)
@@ -61,14 +86,15 @@ socket.on('user-disconnected', userId => {
 
 peer.on('open', id => {
     cUser = id; //test
-    socket.emit('join-room', room_id, id)
+    console.log(cUser);
+    socket.emit('join-room', room_id, id, myName)
 })
 
-function connectToNewUser(userId, stream) {
+function connectToNewUser(userId, name, stream) {
     const call = peer.call(userId, stream)
     const video = document.createElement('video')
     call.on('stream', userVideoStream => {
-        addVideoStream(video, userVideoStream)
+        addVideoStream(video, name, userVideoStream)
     })
     call.on('close', () => {
         video.remove()
@@ -78,15 +104,23 @@ function connectToNewUser(userId, stream) {
     currentPeer.push(call.peerConnection) //test
 }
 
-function addVideoStream(video, stream) {
+function addVideoStream(video, name, stream) {
     video.srcObject = stream
     video.addEventListener('loadedmetadata', () => {
         video.play()
     })
     let videoContainer = document.createElement('div')
+    videoContainer.setAttribute("id", name)
     videoContainer.classList.add("video-container")
     videoContainer.append(video)
+    let nameEl = document.createElement('div')
+    // nameEl.setAttribute("id", name)
+    nameEl.className = "userName"
+    nameEl.innerHTML = name
+    videoContainer.append(nameEl)
     videoGrid.append(videoContainer)
+    count++
+    adjust(count)
 }
 
 const muteUnmute = document.getElementById('muteUnmute');
@@ -104,17 +138,15 @@ playStop.onclick = async () => {
 }
 
 const setOnButton = () => {
-    const html = `
-      <span>Video On</span>
-    `
-    document.getElementById('playStop').innerHTML = html;
+    const html = `<i class="unmute fa fa-pause-circle"></i>
+    <span class="unmute">Video On</span>`;
+    document.getElementById("playStop").innerHTML = html;
 }
 
 const setOffButton = () => {
-    const html = `
-      <span>Video Off</span>
-    `
-    document.getElementById('playStop').innerHTML = html;
+    const html = `<i class=" fa fa-video-camera"></i>
+    <span class="">Video Off</span>`;
+    document.getElementById("playStop").innerHTML = html;
 }
 
 // mute and unmute
@@ -131,17 +163,15 @@ muteUnmute.onclick = async () => {
 }
 
 const setMuteButton = () => {
-    const html = `
-      <span>Mute</span>
-    `
-    document.getElementById('muteUnmute').innerHTML = html;
+    const html = `<i class="fa fa-microphone"></i>
+    <span>Mute</span>`;
+    document.getElementById("muteUnmute").innerHTML = html;
 }
 
 const setUnmuteButton = () => {
-    const html = `
-      <span>Unmute</span>
-    `
-    document.getElementById('muteUnmute').innerHTML = html;
+    const html = `<i class="unmute fa fa-microphone-slash"></i>
+    <span class="unmute">Unmute</span>`;
+    document.getElementById("muteUnmute").innerHTML = html;
 }
 
 //share room code
@@ -282,27 +312,118 @@ function stopScreenShare() {
     }
 }
 
-//remove user
+//size adjustment
 function adjust(count) {
-    const screens = document.getElementsByClassName('video-container').forEach(e => {
-        if (count === 2) {
-            e.className = 'video-container'
-            e.classList.add("two")
+    [...document.getElementsByTagName('video')].forEach(e=>{
+        if(count === 1 || count === 3){
+            e.className = ''
+            e.className = 'two'
         }
-
-        if (count === 4) {
-            e.className = 'video-container'
-            e.classList.add("four")
+        if(count === 5 || count === 7 || count === 9 || count === 11){
+            e.className = ''
+            e.className = 'four'
         }
-
-        if (count === 6) {
-            e.className = 'video-container'
-            e.classList.add("six")
+        if(count === 13 || count === 15 || count === 17 || count === 19){
+            e.className = ''
+            e.className = 'six'
         }
-
-        if (count === 8) {
-            e.className = 'video-container'
-            e.classList.add("eight")
+        if(count === 21 || count === 23 || count === 25 || count === 27){
+            e.className = ''
+            e.className = 'eight'
         }
     });
+}
+
+
+//chat message
+const messageSend = document.getElementById('sendMsg')
+const messageContainer = document.getElementById('allMessages')
+const messageInput = document.getElementById('chat')
+const userContainer = document.getElementById('names')
+socket.emit('new-user', myName)
+// appendParticipant(myName)
+socket.on('chat-message', data =>{
+    appendMessage(`${data.name}: ${data.message}`)
+})
+
+// socket.on('user-joined', name =>{
+//     console.log(name)
+//     appendParticipant(name)
+// })
+
+messageInput.addEventListener('keyup', function(event){
+    if(event.keyCode === 13){
+        event.preventDefault()
+        messageSend.click()
+    }
+})
+messageSend.addEventListener('click', e => {
+    e.preventDefault()
+    const message = messageInput.value
+    appendMessage(`You: ${message}`)
+    socket.emit('send-chat-message', message)
+    messageInput.value = ''
+}) 
+
+function appendMessage(message){
+    const messageElement = document.createElement('li')
+    messageElement.innerText = message
+    messageContainer.append(messageElement)
+}
+
+function appendParticipant(name){
+    const userElement = document.createElement('h6')
+    userElement.innerText = name
+    userContainer.append(userElement)
+}
+
+function removeAll(){
+    const userList = document.getElementById('names')
+    userList.querySelectorAll('*').forEach(n => n.remove());
+}
+
+//chat window open and close
+var check = false;
+function showChat(){
+    const left = document.getElementById('left')
+    const right = document.getElementById('right')
+    if(check){
+        left.classList.add('showChatLeft')
+        right.classList.add('showChatRight')
+        left.classList.remove('left')
+        right.classList.remove('right')
+        check = false
+    }else{
+        left.classList.remove('showChatLeft')
+        left.classList.add('left')
+        right.classList.add('right')
+        right.classList.remove('showChatRight')
+        check = true
+    }
+}
+
+//meeting info open close
+var check2 = true;
+function showInfo(){
+    const dropdownContent = document.getElementById('dropdown-content')
+    if(check2){
+        dropdownContent.style.display = "block"
+        check2 = false
+    }else{
+        dropdownContent.style.display = "none"
+        check2 = true
+    }
+}
+
+//participants list open close
+var check3 = true;
+function showList(){
+    const participantsList = document.getElementById('participantsList')
+    if(check3){
+        participantsList.style.display = "block"
+        check3 = false
+    }else{
+        participantsList.style.display = "none"
+        check3 = true
+    }
 }

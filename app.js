@@ -4,6 +4,7 @@ const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const { v4: uuidV4 } = require('uuid')
 const userS = [], userI = []
+const msg = {}
 
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
@@ -21,20 +22,20 @@ app.get('/:room', (req, res) => {
 })
 
 io.on('connection', socket => {
-    socket.on('join-room', (roomId, userId) => {
-        
+    socket.on('join-room', (roomId, userId, name) => {
+
         //test
         userS.push(socket.id);
-		userI.push(userId);
+		userI.push({userId, name});
         //test
 
         socket.join(roomId)
-        socket.broadcast.to(roomId).emit('user-connected', userId)
+        socket.broadcast.to(roomId).emit('user-connected', userId, name)
 
         //remove user
         socket.on('removeUser', (sUser, rUser)=>{
 	    	var i = userS.indexOf(rUser);
-	    	if(sUser == userI[0]){
+	    	if(sUser == userI[0].userId){
 	    	  console.log("SuperUser Removed"+rUser);
 	    	  socket.broadcast.to(roomId).emit('remove-User', rUser);
 	    	}
@@ -53,11 +54,12 @@ io.on('connection', socket => {
 	    	//userS.filter(item => item !== userId);
 	    	var i = userS.indexOf(socket.id);
 	    	userS.splice(i, 1);
-            socket.broadcast.to(roomId).emit('user-disconnected', userI[i]);
+            // socket.broadcast.to(roomId).emit('user-disconnected', userI[i].userId);
+            socket.broadcast.to(roomId).emit('user-disconnected', {userId:userI[i].userId, name: userI[i].name});
             //update array
-           
             userI.splice(i, 1);
 	    });
+        // socket.broadcast.to(roomId).emit('userList', userI);
 	    socket.on('seruI', () =>{
 	    	socket.emit('all_users_inRoom', userI);
 			//console.log(userS);
@@ -67,6 +69,32 @@ io.on('connection', socket => {
         // socket.on('disconnect', () => {
         //     socket.broadcast.to(roomId).emit('user-disconnected', userId)
         // })
+
+        // socket.on('new-user', name => {
+        //     msg[socket.id] = name
+        //     console.log(name)
+        //     socket.broadcast.emit('user-joined', "hello")
+        // })
+
+        // socket.on('send-chat-message', message => {
+        //     console.log(msg[socket.id])
+        //     socket.broadcast.emit('chat-message', {message: message, name: msg[socket.id]})
+        // })
+
+        socket.on('participants', () => {
+            socket.emit('participant-list', userI)
+        })
+    })
+
+    socket.on('new-user', name => {
+        msg[socket.id] = name
+        console.log(name)
+        // socket.broadcast.emit('user-joined', name)
+    })
+
+    socket.on('send-chat-message', message => {
+        console.log(msg[socket.id])
+        socket.broadcast.emit('chat-message', {message: message, name: msg[socket.id]})
     })
 })
 server.listen(3000)
