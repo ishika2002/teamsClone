@@ -94,7 +94,18 @@ io.on('connection', socket => {
 
     socket.on('send-chat-message', message => {
         console.log(msg[socket.id])
-        socket.broadcast.emit('chat-message', {message: message, name: msg[socket.id]})
+        // socket.broadcast.emit('chat-message', {message: message, name: msg[socket.id]})
+        var i = userS.indexOf(socket.id);
+        socket.broadcast.emit('chat-message', {message: message, name: userI[i].name})
     })
+
+    //test
+    socket.on('send-raise-hand', () => {
+        console.log(msg[socket.id])
+        // socket.broadcast.emit('raise-hand', msg[socket.id])
+        var i = userS.indexOf(socket.id);
+        socket.broadcast.emit('raise-hand', {userId: userI[i].userId, name: userI[i].name})
+    })
+    //test
 })
 server.listen(3000)

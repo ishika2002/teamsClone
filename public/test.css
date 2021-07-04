@@ -290,12 +290,18 @@ video {
 }
 
 /*layout adjustment*/
+.one{
+  height: 400px;
+  width: 500px;
+  object-fit: cover;
+  margin: 10px 10px 10px 10px;
+}
+
 .two{
   height: 300px;
   width: 400px;
   object-fit: cover;
   margin: 10px 10px 10px 10px;
-  
 }
 
 .four{
@@ -303,7 +309,6 @@ video {
   width: 300px;
   object-fit: cover;
   margin: 10px 10px 10px 10px;
-  
 }
 
 .six{
@@ -311,7 +316,6 @@ video {
   width: 250px;
   object-fit: cover;
   margin: 10px 10px 10px 10px;
-  
 }
 
 .eight{
@@ -319,6 +323,5 @@ video {
   width: 150px;
   object-fit: cover;
   margin: 10px 10px 10px 10px;
-  
 }
 

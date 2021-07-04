@@ -9,7 +9,7 @@ const peer = new Peer(undefined, {
 const localVideo = document.createElement('video')
 localVideo.muted = true
 let myVideoStream
-let count = 1
+let count = 0
 const peers = {}
 
 //test
@@ -28,7 +28,7 @@ navigator.mediaDevices.getUserMedia({
     audio: true
 }).then(stream => {
     myVideoStream = stream
-    addVideoStream(localVideo, "Me", stream)
+    addVideoStream(localVideo, "Me", "admin", stream)
 
     peer.on('call', call => {
         call.answer(stream)
@@ -39,7 +39,17 @@ navigator.mediaDevices.getUserMedia({
             userList.forEach(e => {
                 if(e.userId == myId){
                     call.on('stream', userVideoStream => {
-                        addVideoStream(video, e.name, userVideoStream)
+                        addVideoStream(video, e.name, e.userId, userVideoStream)
+                        //test
+                        socket.emit('participants')
+                        socket.on('participant-list', users =>{
+                            removeAll()
+                            users.forEach(e => {
+                                appendParticipant(e.name)
+                            })
+                            console.log(users)
+                        })
+                        //test
                     })
                 }
             });
@@ -50,6 +60,39 @@ navigator.mediaDevices.getUserMedia({
     })
     
     //code for appending participants
+    // socket.emit('participants')
+    // socket.on('participant-list', users =>{
+    //     removeAll()
+    //     users.forEach(e => {
+    //         appendParticipant(e.name)
+    //     })
+    //     console.log(users)
+    // })
+
+    socket.on('user-connected', (userId, name) => {
+        setTimeout(() => {
+            connectToNewUser(userId, name, stream)
+        }, 1000)
+        // count++
+        console.log(name)
+        // console.log(count)
+        // adjust(count)
+        console.log('user connected: ' + userId)
+    })
+})
+
+socket.on('user-disconnected', user => {
+    count--
+    console.log(count)
+    adjust(count)
+    if (peers[user.userId]) peers[user.userId].close()
+    console.log('user disconnected: ', user.userId)
+    const left = document.getElementById(`${user.userId}`)
+    left.parentNode.removeChild(left);
+    // left.querySelectorAll('*').forEach(n => n.remove());
+    // const user = document.getElementById(name)
+    // user.remove()
+    //test
     socket.emit('participants')
     socket.on('participant-list', users =>{
         removeAll()
@@ -58,30 +101,7 @@ navigator.mediaDevices.getUserMedia({
         })
         console.log(users)
     })
-
-    socket.on('user-connected', (userId, name) => {
-        setTimeout(() => {
-            connectToNewUser(userId, name, stream)
-        }, 1000)
-        // count++
-        console.log(name)
-        console.log(count)
-        // adjust(count)
-        console.log('user connected: ' + userId)
-    })
-})
-
-socket.on('user-disconnected', user => {
-    if (peers[user.userId]) peers[user.userId].close()
-    console.log('user disconnected: ', user.userId)
-    const left = document.getElementById(`${user.name}`)
-    left.parentNode.removeChild(left);
-    // left.querySelectorAll('*').forEach(n => n.remove());
-    // const user = document.getElementById(name)
-    // user.remove()
-    count--
-    console.log(count)
-    adjust(count)
+    //test
 })
 
 peer.on('open', id => {
@@ -94,7 +114,17 @@ function connectToNewUser(userId, name, stream) {
     const call = peer.call(userId, stream)
     const video = document.createElement('video')
     call.on('stream', userVideoStream => {
-        addVideoStream(video, name, userVideoStream)
+        addVideoStream(video, name, userId, userVideoStream)
+        //test
+        socket.emit('participants')
+        socket.on('participant-list', users =>{
+            removeAll()
+            users.forEach(e => {
+                appendParticipant(e.name)
+            })
+            console.log(users)
+        })
+        //test
     })
     call.on('close', () => {
         video.remove()
@@ -104,23 +134,27 @@ function connectToNewUser(userId, name, stream) {
     currentPeer.push(call.peerConnection) //test
 }
 
-function addVideoStream(video, name, stream) {
-    video.srcObject = stream
-    video.addEventListener('loadedmetadata', () => {
-        video.play()
-    })
-    let videoContainer = document.createElement('div')
-    videoContainer.setAttribute("id", name)
-    videoContainer.classList.add("video-container")
-    videoContainer.append(video)
-    let nameEl = document.createElement('div')
-    // nameEl.setAttribute("id", name)
-    nameEl.className = "userName"
-    nameEl.innerHTML = name
-    videoContainer.append(nameEl)
-    videoGrid.append(videoContainer)
-    count++
-    adjust(count)
+function addVideoStream(video, name, divId, stream) {
+    if(document.getElementById(divId) == null){
+        video.srcObject = stream
+        video.addEventListener('loadedmetadata', () => {
+            video.play()
+        })
+        let videoContainer = document.createElement('div')
+        // videoContainer.setAttribute("id", name)
+        videoContainer.setAttribute("id", divId)
+        videoContainer.classList.add("video-container")
+        videoContainer.append(video)
+        let nameEl = document.createElement('div')
+        // nameEl.setAttribute("id", name)
+        nameEl.className = "userName"
+        nameEl.innerHTML = name
+        videoContainer.append(nameEl)
+        videoGrid.append(videoContainer)
+        count++
+        console.log(count)
+        adjust(count)
+    }
 }
 
 const muteUnmute = document.getElementById('muteUnmute');
@@ -315,19 +349,19 @@ function stopScreenShare() {
 //size adjustment
 function adjust(count) {
     [...document.getElementsByTagName('video')].forEach(e=>{
-        if(count === 1 || count === 3){
+        if(count === 1 || count === 2){
             e.className = ''
             e.className = 'two'
         }
-        if(count === 5 || count === 7 || count === 9 || count === 11){
+        if(count === 3 || count === 4 || count === 5 || count === 6){
             e.className = ''
             e.className = 'four'
         }
-        if(count === 13 || count === 15 || count === 17 || count === 19){
+        if(count === 7 || count === 8 || count === 9 || count === 10){
             e.className = ''
             e.className = 'six'
         }
-        if(count === 21 || count === 23 || count === 25 || count === 27){
+        if(count === 11 || count === 12 || count === 13 || count === 14){
             e.className = ''
             e.className = 'eight'
         }
@@ -372,8 +406,16 @@ function appendMessage(message){
 }
 
 function appendParticipant(name){
-    const userElement = document.createElement('h6')
-    userElement.innerText = name
+    const userElement = document.createElement('div')
+    userElement.setAttribute("id", name+"-new")
+    userElement.style.width = "250px"
+    userElement.style.height = "20px"
+    userElement.style.display = "flex"
+    userElement.style.justifyContent = "space-between"
+    userElement.style.margin = "10px 10px 10px 10px"
+    const userName  = document.createElement('h6')
+    userName.innerText = name
+    userElement.append(userName)
     userContainer.append(userElement)
 }
 
@@ -427,3 +469,67 @@ function showList(){
         check3 = true
     }
 }
+
+//raise hand
+const raiseHand = document.getElementById('raiseHandButton')
+var check4 = true
+socket.on('raise-hand', user =>{
+    const border = document.getElementById(user.userId)
+    if(check4){
+        appendRaiseHand(user.name)
+        border.style.border = "2px solid yellow"
+        border.style.boxShadow = "0 0 10px 5px yellow"
+    }else{
+        removeRaiseHand(user.name)
+        border.style.border = "none"
+        border.style.boxShadow = "none"
+    }
+})
+var check5 = false
+raiseHand.addEventListener('click', e => {
+    console.log(check5)
+    if(check5){
+        raiseHandUp()
+    }else{
+        raiseHandDown()
+    }
+    e.preventDefault()
+    socket.emit('send-raise-hand')
+})
+
+function appendRaiseHand(name){
+    check4 = false
+    const position = document.getElementById(name+"-new")
+    const hand = document.createElement('i')
+    hand.setAttribute("class", "fa fa-hand-paper-o")
+    hand.setAttribute("id", name+"-hand")
+    hand.style.color = "#f1f1f1"
+    // hand.innerText = 'raised'
+    position.append(hand)
+}
+
+function removeRaiseHand(name){
+    check4 = true
+    const raiseHand = document.getElementById(name+"-hand")
+    raiseHand.remove()
+}
+
+const raiseHandUp = () => {
+    const html = `<i class="fa fa-hand-paper-o"></i>
+    <span>Raise Up</span>`;
+    document.getElementById("raiseHandButton").innerHTML = html;
+    const tag = document.getElementById("raiseHandButton")
+    tag.style.color = "white"
+    check5 = false
+}
+
+const raiseHandDown = () => {
+    const html = `<i class="fa fa-hand-paper-o"></i>
+    <span>Raise Down</span>`;
+    document.getElementById("raiseHandButton").innerHTML = html;
+    const tag = document.getElementById("raiseHandButton")
+    tag.style.color = "red"
+    check5 = true
+}
+
+//glow around speaking candidate
