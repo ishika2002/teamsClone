@@ -6,6 +6,7 @@ const { v4: uuidV4 } = require('uuid')
 const userS = [], userI = []
 const msg = {}
 const { PeerServer } = require('peer');
+const fs = require('fs')
 
 const peerServer = PeerServer({
     debug: true,
