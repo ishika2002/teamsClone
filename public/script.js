@@ -303,7 +303,7 @@ const share = () => {
 const disconnect = document.getElementById('disconnect');
 
 disconnect.onclick = async () => {
-    window.location = "http://localhost:3000/";
+    window.location = "/";
 }
 
 //screen share
@@ -589,6 +589,7 @@ socket.on('glow-around', user =>{
 
 socket.on('no-glow-around', user => {
     const border = document.getElementById(user.userId)
+    if(border)
     border.style.border = "none"
     // border.style.boxShadow = "none"
 })
