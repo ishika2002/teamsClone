@@ -2,7 +2,7 @@ const socket = io('/')
 const videoGrid = document.getElementById('video-grid')
 
 const peer = new Peer(undefined, {
-    host: '/',
+    host: 'peerjs.herokuapp.com',
     port: '3001'
 })
 
@@ -349,11 +349,11 @@ function stopScreenShare() {
 //size adjustment
 function adjust(count) {
     [...document.getElementsByTagName('video')].forEach(e=>{
-        if(count === 1 || count === 2){
+        if(count === 1 || count === 2 || count === 3){
             e.className = ''
             e.className = 'two'
         }
-        if(count === 3 || count === 4 || count === 5 || count === 6){
+        if(count === 4 || count === 5 || count === 6){
             e.className = ''
             e.className = 'four'
         }
@@ -478,11 +478,11 @@ socket.on('raise-hand', user =>{
     if(check4){
         appendRaiseHand(user.name)
         border.style.border = "2px solid yellow"
-        border.style.boxShadow = "0 0 10px 5px yellow"
+        // border.style.boxShadow = "0 0 10px 5px yellow"
     }else{
         removeRaiseHand(user.name)
         border.style.border = "none"
-        border.style.boxShadow = "none"
+        // border.style.boxShadow = "none"
     }
 })
 var check5 = false
@@ -533,3 +533,87 @@ const raiseHandDown = () => {
 }
 
 //glow around speaking candidate
+var recognizing = true;
+const audioButton = document.getElementById('muteUnmute')
+// const admin = document.querySelector('.video-container')
+// var check4 = true
+if(!('webkitSpeechRecognition' in window)){
+    upgrade()
+}else{
+    var recognition = new webkitSpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    recognition.onstart = function() {
+        recognizing = false;
+        console.log(true)
+        // change(true)
+    };
+
+    recognition.onend = function() {
+        recognizing = true;
+        // admin.className = ''
+        // admin.className = 'video-container none'
+        socket.emit('remove-glow-around')
+        glowOff()
+        // change(false)
+      };
+    
+      recognition.onresult = function(event) {
+        console.log(event)
+        console.log(true) 
+        for (var i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+                // admin.className = ''
+                // admin.className = 'video-container none'
+                socket.emit('remove-glow-around')
+                glowOff()
+            } else {
+                // admin.className = ''
+                // admin.className = 'video-container test'
+                socket.emit('send-glow-around')
+                glowOn()
+            }
+        }
+        // change(true)
+    };
+}
+socket.on('glow-around', user =>{
+    const border = document.getElementById(user.userId)
+    border.style.border = "2px solid blue"
+    // border.style.boxShadow = "0 0 10px 5px green"
+})
+
+socket.on('no-glow-around', user => {
+    const border = document.getElementById(user.userId)
+    border.style.border = "none"
+    // border.style.boxShadow = "none"
+})
+
+audioButton.addEventListener('click', e => {
+    if (recognizing == false) {
+        recognition.stop();
+        return;
+    }else{
+        recognition.start();
+    }
+    // e.preventDefault()
+    // socket.emit('send-glow-around')
+})
+if(recognizing){
+    recognition.start();
+}
+
+function glowOff(){
+    const admin = document.querySelector('#admin')
+    admin.style.border = "none"
+    // admin.style.boxShadow = "none"
+}
+
+function glowOn(){
+    const admin = document.querySelector('#admin')
+    admin.style.border = "2px solid blue"
+    // admin.style.boxShadow = "0 0 10px 5px green"
+}
+
+

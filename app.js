@@ -107,5 +107,26 @@ io.on('connection', socket => {
         socket.broadcast.emit('raise-hand', {userId: userI[i].userId, name: userI[i].name})
     })
     //test
+
+    //test
+    socket.on('send-glow-around', () => {
+        console.log(msg[socket.id]+" glow")
+        // socket.broadcast.emit('raise-hand', msg[socket.id])
+        var i = userS.indexOf(socket.id);
+        if(i!=-1){
+            socket.broadcast.emit('glow-around', {userId: userI[i].userId, name: userI[i].name})
+        }
+    })
+
+    socket.on('remove-glow-around', () => {
+        console.log(msg[socket.id]+" no glow")
+        // socket.broadcast.emit('raise-hand', msg[socket.id])
+        var i = userS.indexOf(socket.id);
+        console.log(i)
+        if(i!=-1){
+            socket.broadcast.emit('no-glow-around', {userId: userI[i].userId, name: userI[i].name})
+        }
+    })
+    //test
 })
 server.listen(3000)

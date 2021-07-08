@@ -19,11 +19,11 @@ body {
   overflow-y: auto;
 }
 video {
-    height: 300px;
-    width: 400px;
-    object-fit: contain;
-    margin: 10px 10px 10px 10px;
-    border: 5px solid #000;
+  height: 300px;
+  width: 400px;
+  object-fit: contain;
+  margin: 10px 10px 10px 10px;
+  border: 5px solid #000;
 }
 /* test */
 .video-container{
@@ -155,19 +155,19 @@ video {
 }
 
 .sendContainer input:focus {
-    box-shadow: 0 0 5px #4c5d75;
-    padding: 3px 0px 3px 3px;
-    margin: 8px 1px 5px 2px;
-    border: 1px solid #4c5d75;
+  box-shadow: 0 0 5px #4c5d75;
+  padding: 3px 0px 3px 3px;
+  margin: 8px 1px 5px 2px;
+  border: 1px solid #4c5d75;
 }
 
 .sendContainer button{
-    background-color: #343F4F;
-    color: #d2d2d2;
-    padding: 2px;
-    margin: 8px 0px 5px 2px;
-    width: 35px;
-    height: 35px;
+  background-color: #343F4F;
+  color: #d2d2d2;
+  padding: 2px;
+  margin: 8px 0px 5px 2px;
+  width: 35px;
+  height: 35px;
 }
 
 #allMessages li {
@@ -181,24 +181,28 @@ video {
   color: red;
 }
 .showChatRight{
-    display: none;
-    position: fixed;
-    width: 100%;
-    /* height: calc(100% - 65px); */
-    height: 100%;
-    opacity: 0.8;
+  display: none;
+  position: fixed;
+  width: 100%;
+  /* height: calc(100% - 65px); */
+  height: 100%;
+  opacity: 0.8;
 }
 
 .showChatLeft{
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .userName{
-    color: white;
-    /* position: absolute; */
-    top:10px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* position: absolute;
+  top: 115px;
+  left: 450px; */
 }
 
 .dropdown-content {
@@ -243,7 +247,7 @@ video {
   color: #f1f1f1;
 }
 
-.dropdown-content button:hover {
+.dropdown-content button:hover{
   background-color: #4c5d75;
 }
 
@@ -325,3 +329,12 @@ video {
   margin: 10px 10px 10px 10px;
 }
 
+.test{
+  border: 2px solid green;
+  box-shadow: 0 0 10px 5px green;
+}
+
+.none{
+  border: none;
+  box-shadow: none;
+}
