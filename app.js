@@ -73,6 +73,7 @@ io.on('connection', socket => {
 	    });
         // socket.broadcast.to(roomId).emit('userList', userI);
 	    socket.on('seruI', () =>{
+            console.log(userI)
 	    	socket.emit('all_users_inRoom', userI);
 			//console.log(userS);
 		    console.log(userI);
