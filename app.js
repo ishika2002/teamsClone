@@ -13,8 +13,8 @@ const peerServer = PeerServer({
     path: "/myapp",
     port: 9000,
     ssl:{
-        key: fs.readFileSync('./privateKey.pem', 'utf8'),
-        cert: fs.readFileSync('./certificate.cert', 'utf8')
+        key: fs.readFileSync('./config/privateKey.pem', 'utf8'),
+        cert: fs.readFileSync('./config/certificate.cert', 'utf8')
     }
 })
 
