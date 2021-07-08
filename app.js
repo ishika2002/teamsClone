@@ -5,13 +5,17 @@ const io = require('socket.io')(server)
 const { v4: uuidV4 } = require('uuid')
 const userS = [], userI = []
 const msg = {}
-const { PeerServer } = require('peer');
-const fs = require('fs')
+// const { PeerServer } = require('peer');
+// const fs = require('fs')
 
 // const peerServer = PeerServer({
-//     debug: true,
-//     path: "/myapp",
-//     port: 9000
+    // debug: true,
+    // path: "/myapp",
+    // port: 9000,
+    // ssl:{
+    //     key: fs.readFileSync('./config/cert.key', 'utf8'),
+    //     cert: fs.readFileSync('./config/cert.csr', 'utf8')
+    // }
 // })
 
 app.set('view engine', 'ejs')
