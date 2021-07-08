@@ -8,15 +8,11 @@ const msg = {}
 const { PeerServer } = require('peer');
 const fs = require('fs')
 
-const peerServer = PeerServer({
-    debug: true,
-    path: "/myapp",
-    port: 9000,
-    // ssl:{
-    //     key: fs.readFileSync('./config/cert.key', 'utf8'),
-    //     cert: fs.readFileSync('./config/cert.csr', 'utf8')
-    // }
-})
+// const peerServer = PeerServer({
+//     debug: true,
+//     path: "/myapp",
+//     port: 9000
+// })
 
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
