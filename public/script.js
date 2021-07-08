@@ -40,7 +40,7 @@ navigator.mediaDevices.getUserMedia({
         socket.emit('seruI')
         socket.on('all_users_inRoom', userList => {
             userList.forEach(e => {
-                if(e.userId == myId){
+                // if(e.userId == myId){
                     call.on('stream', userVideoStream => {
                         addVideoStream(video, e.name, e.userId, userVideoStream)
                         //test
@@ -54,7 +54,7 @@ navigator.mediaDevices.getUserMedia({
                         })
                         //test
                     })
-                }
+                // }
             });
         });
         currentPeer.push(call.peerConnection);
