@@ -5,7 +5,7 @@ const peer = new Peer(undefined, {
     secure: true,
     host: 'pj20.herokuapp.com',
     path: '/myapp',
-    port: '443',
+    port: '9000',
     key: 'peerjs'
     // ssl:{
     //     key: fs

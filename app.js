@@ -12,10 +12,10 @@ const peerServer = PeerServer({
     debug: true,
     path: "/myapp",
     port: 9000,
-    ssl:{
-        key: fs.readFileSync('./config/privateKey.pem', 'utf8'),
-        cert: fs.readFileSync('./config/certificate.cert', 'utf8')
-    }
+    // ssl:{
+    //     key: fs.readFileSync('./config/cert.key', 'utf8'),
+    //     cert: fs.readFileSync('./config/cert.csr', 'utf8')
+    // }
 })
 
 app.set('view engine', 'ejs')
