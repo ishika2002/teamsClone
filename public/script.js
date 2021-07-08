@@ -4,7 +4,7 @@ const videoGrid = document.getElementById('video-grid')
 const peer = new Peer(undefined, {
     secure: true,
     host: 'pj20.herokuapp.com',
-    // path: '/myapp',
+    path: '/myapp',
     port: '443',
     key: 'peerjs'
     // ssl:{
