@@ -36,25 +36,25 @@ navigator.mediaDevices.getUserMedia({
     peer.on('call', call => {
         socket.emit('seruI')
         socket.on('all_users_inRoom', userList => {
-        userList.forEach(e => {
-        call.answer(stream)
-        let myId = call.peer;
-        const video = document.createElement('video')
-        call.on('stream', userVideoStream => {
-            if(e.userId == myId)
-            addVideoStream(video, e.name, e.userId, userVideoStream)
-            //test
-            socket.emit('participants')
-            socket.on('participant-list', users =>{
-                removeAll()
-                users.forEach(e => {
-                    appendParticipant(e.name)
-                })
-                console.log(users)
-            })
-            //test
-        });
-        });
+            userList.forEach(e => {
+                call.answer(stream)
+                let myId = call.peer;
+                const video = document.createElement('video')
+                call.on('stream', userVideoStream => {
+                    if(e.userId == myId)
+                    addVideoStream(video, e.name, e.userId, userVideoStream)
+                    //test
+                    socket.emit('participants')
+                    socket.on('participant-list', users =>{
+                        removeAll()
+                        users.forEach(e => {
+                            appendParticipant(e.name)
+                        })
+                        console.log(users)
+                    })
+                    //test
+                });
+            });
         })
         // socket.emit('seruI')
         // socket.on('all_users_inRoom', userList => {
@@ -371,11 +371,11 @@ function stopScreenShare() {
 //size adjustment
 function adjust(count) {
     [...document.getElementsByTagName('video')].forEach(e=>{
-        if(count === 1 || count === 2 || count === 3){
+        if(count === 1 || count === 2){
             e.className = ''
             e.className = 'two'
         }
-        if(count === 4 || count === 5 || count === 6){
+        if(count === 3 || count === 4 || count === 5 || count === 6){
             e.className = ''
             e.className = 'four'
         }
