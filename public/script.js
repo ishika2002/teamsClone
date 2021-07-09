@@ -34,29 +34,48 @@ navigator.mediaDevices.getUserMedia({
     addVideoStream(localVideo, "Me", "admin", stream)
 
     peer.on('call', call => {
+        socket.emit('seruI')
+        socket.on('all_users_inRoom', userList => {
+        userList.forEach(e => {
         call.answer(stream)
         let myId = call.peer;
         const video = document.createElement('video')
-        socket.emit('seruI')
-        socket.on('all_users_inRoom', userList => {
-            userList.forEach(e => {
-                if(e.userId == myId){
-                    call.on('stream', userVideoStream => {
-                        addVideoStream(video, e.name, e.userId, userVideoStream)
-                        //test
-                        // socket.emit('participants')
-                        // socket.on('participant-list', users =>{
-                        //     removeAll()
-                        //     users.forEach(e => {
-                        //         appendParticipant(e.name)
-                        //     })
-                        //     console.log(users)
-                        // })
-                        //test
-                    })
-                }
-            });
+        call.on('stream', userVideoStream => {
+            if(e.userId == myId)
+            addVideoStream(video, e.name, e.userId, userVideoStream)
+            //test
+            socket.emit('participants')
+            socket.on('participant-list', users =>{
+                removeAll()
+                users.forEach(e => {
+                    appendParticipant(e.name)
+                })
+                console.log(users)
+            })
+            //test
         });
+        });
+        })
+        // socket.emit('seruI')
+        // socket.on('all_users_inRoom', userList => {
+        //     userList.forEach(e => {
+        //         if(e.userId == myId){
+        //             call.on('stream', userVideoStream => {
+        //                 addVideoStream(video, e.name, e.userId, userVideoStream)
+        //                 //test
+        //                 socket.emit('participants')
+        //                 socket.on('participant-list', users =>{
+        //                     removeAll()
+        //                     users.forEach(e => {
+        //                         appendParticipant(e.name)
+        //                     })
+        //                     console.log(users)
+        //                 })
+        //                 //test
+        //             })
+        //         }
+        //     });
+        // });
         currentPeer.push(call.peerConnection);
         console.log(call.peerConnection) //test
         //test2
