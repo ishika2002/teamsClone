@@ -338,3 +338,64 @@ video {
   border: none;
   box-shadow: none;
 }
+
+.fullScreen{
+  height: 800px;
+  width: 1000px;
+}
+
+/* test */
+.header1{
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background-color: #343F4F;
+  color: #f1f1f1;
+}
+
+.header1 .text{
+  width: 98%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.header1 .icons{
+  width: 2%;
+  float: right;
+}
+
+.header1 .icons i{
+  cursor: pointer;
+}
+
+.header1 h6{
+  margin: 10px;
+}
+
+.header1 button{
+  border-radius: 5px;
+  border: none;
+  padding: 5px;
+  font-size: 10px;
+}
+
+.header2{
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background-color: #343F4F;
+  color: #f1f1f1;
+}
+
+.header2 h6{
+  margin: 10px;
+}
+
+.header2 button{
+  border-radius: 5px;
+  border: none;
+  padding: 5px;
+  font-size: 10px;
+}

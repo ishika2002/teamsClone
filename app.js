@@ -6,7 +6,7 @@ const { v4: uuidV4 } = require('uuid')
 const userS = [], userI = []
 const msg = {}
 const { PeerServer } = require('peer');
-const fs = require('fs')
+// const fs = require('fs')
 
 const peerServer = PeerServer({
     debug: true,
@@ -136,12 +136,28 @@ io.on('connection', socket => {
         console.log(msg[socket.id]+" no glow")
         // socket.broadcast.emit('raise-hand', msg[socket.id])
         var i = userS.indexOf(socket.id);
-        console.log(i)
+        // console.log(i)
         if(i!=-1){
             socket.broadcast.emit('no-glow-around', {userId: userI[i].userId, name: userI[i].name})
         }
     })
     //test
+
+    //test
+    socket.on('send-share-screen', () => {
+        console.log('screen shared')
+        var i = userS.indexOf(socket.id);
+        console.log(i)
+        socket.broadcast.emit('share-screen', {userId: userI[i].userId, name: userI[i].name})
+    })
+    //test
+
+    socket.on('remove-share-screen', () => {
+        console.log("screen removed")
+        var i = userS.indexOf(socket.id);
+        // console.log(i)
+        socket.broadcast.emit('stop-share-screen', {userId: userI[i].userId, name: userI[i].name})
+    })
 })
 const PORT = process.env.PORT || 3000;
 server.listen(PORT)

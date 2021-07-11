@@ -56,28 +56,8 @@ navigator.mediaDevices.getUserMedia({
                 });
             });
         })
-        // socket.emit('seruI')
-        // socket.on('all_users_inRoom', userList => {
-        //     userList.forEach(e => {
-        //         if(e.userId == myId){
-        //             call.on('stream', userVideoStream => {
-        //                 addVideoStream(video, e.name, e.userId, userVideoStream)
-        //                 //test
-        //                 socket.emit('participants')
-        //                 socket.on('participant-list', users =>{
-        //                     removeAll()
-        //                     users.forEach(e => {
-        //                         appendParticipant(e.name)
-        //                     })
-        //                     console.log(users)
-        //                 })
-        //                 //test
-        //             })
-        //         }
-        //     });
-        // });
         currentPeer.push(call.peerConnection);
-        console.log(call.peerConnection) //test
+        console.log("jaa rha hai!", call) //test
         //test2
     })
     
@@ -153,7 +133,8 @@ function connectToNewUser(userId, name, stream) {
     })
 
     peers[userId] = call
-    currentPeer.push(call.peerConnection) //test
+    currentPeer.push(call.peerConnection)
+    console.log("sahi jaa rha hai!", call) //test
 }
 
 function addVideoStream(video, name, divId, stream) {
@@ -194,13 +175,13 @@ playStop.onclick = async () => {
 }
 
 const setOnButton = () => {
-    const html = `<i class="unmute fa fa-pause-circle"></i>
+    const html = `<i class="bi bi-camera-video-off-fill unmute"></i>
     <span class="unmute">Video On</span>`;
     document.getElementById("playStop").innerHTML = html;
 }
 
 const setOffButton = () => {
-    const html = `<i class=" fa fa-video-camera"></i>
+    const html = `<i class="bi bi-camera-video-fill"></i>
     <span class="">Video Off</span>`;
     document.getElementById("playStop").innerHTML = html;
 }
@@ -219,13 +200,13 @@ muteUnmute.onclick = async () => {
 }
 
 const setMuteButton = () => {
-    const html = `<i class="fa fa-microphone"></i>
+    const html = `<i class="bi bi-mic-fill"></i>
     <span>Mute</span>`;
     document.getElementById("muteUnmute").innerHTML = html;
 }
 
 const setUnmuteButton = () => {
-    const html = `<i class="unmute fa fa-microphone-slash"></i>
+    const html = `<i class="bi bi-mic-mute-fill unmute"></i>
     <span class="unmute">Unmute</span>`;
     document.getElementById("muteUnmute").innerHTML = html;
 }
@@ -326,6 +307,21 @@ disconnect.onclick = async () => {
 }
 
 //screen share
+const scShare = document.getElementById('screenShare')
+socket.on('share-screen', user => {
+    console.log('sharing started')
+    const pscreen = document.getElementById(user.userId)
+    const cscreen = pscreen.childNodes[0]
+    const cl = cscreen.getAttribute("class")
+    console.log(cl)
+    cscreen.style.height = "auto"
+    cscreen.style.width = "1000px"
+})
+scShare.addEventListener('click', e => {
+    e.preventDefault()
+    socket.emit('send-share-screen')
+})
+
 const screenshare = () => {
     navigator.mediaDevices.getDisplayMedia({
         video: {
@@ -343,12 +339,10 @@ const screenshare = () => {
             stopScreenShare();
         }
         for (let x = 0; x < currentPeer.length; x++) {
-
             let sender = currentPeer[x].getSenders().find(function (s) {
                 return s.track.kind == videoTrack.kind;
             })
             //    console.log(sender);
-            //    console.log("current peer")
             //    console.log(currentPeer)
             sender.replaceTrack(videoTrack);
             //    localVideo.classList.add('fullScreen')
@@ -357,7 +351,17 @@ const screenshare = () => {
     })
 }
 
+socket.on('stop-share-screen', user => {
+    console.log('sharing stopped')
+    const pscreen = document.getElementById(user.userId)
+    const cscreen = pscreen.childNodes[0]
+    const cl = cscreen.getAttribute("class")
+    console.log(cl)
+    cscreen.removeAttribute("style")    
+})
+
 function stopScreenShare() {
+    socket.emit('remove-share-screen')
     let videoTrack = myVideoStream.getVideoTracks()[0];
     localVideo.srcObject = myVideoStream;
     for (let x = 0; x < currentPeer.length; x++) {
@@ -499,7 +503,7 @@ socket.on('raise-hand', user =>{
     const border = document.getElementById(user.userId)
     if(check4){
         appendRaiseHand(user.name)
-        border.style.border = "2px solid yellow"
+        border.style.border = "2px solid #F7FD04"
         // border.style.boxShadow = "0 0 10px 5px yellow"
     }else{
         removeRaiseHand(user.name)
@@ -523,7 +527,7 @@ function appendRaiseHand(name){
     check4 = false
     const position = document.getElementById(name+"-new")
     const hand = document.createElement('i')
-    hand.setAttribute("class", "fa fa-hand-paper-o")
+    hand.setAttribute("class", "bi bi-hand-index-fill")
     hand.setAttribute("id", name+"-hand")
     hand.style.color = "#f1f1f1"
     // hand.innerText = 'raised'
@@ -537,7 +541,7 @@ function removeRaiseHand(name){
 }
 
 const raiseHandUp = () => {
-    const html = `<i class="fa fa-hand-paper-o"></i>
+    const html = `<i class="bi bi-hand-index-fill"></i>
     <span>Raise Up</span>`;
     document.getElementById("raiseHandButton").innerHTML = html;
     const tag = document.getElementById("raiseHandButton")
@@ -546,7 +550,7 @@ const raiseHandUp = () => {
 }
 
 const raiseHandDown = () => {
-    const html = `<i class="fa fa-hand-paper-o"></i>
+    const html = `<i class="bi bi-hand-index-fill"></i>
     <span>Raise Down</span>`;
     document.getElementById("raiseHandButton").innerHTML = html;
     const tag = document.getElementById("raiseHandButton")
@@ -602,7 +606,7 @@ if(!('webkitSpeechRecognition' in window)){
 }
 socket.on('glow-around', user =>{
     const border = document.getElementById(user.userId)
-    border.style.border = "2px solid blue"
+    border.style.border = "2px solid #23049D"
     // border.style.boxShadow = "0 0 10px 5px green"
 })
 
@@ -635,8 +639,101 @@ function glowOff(){
 
 function glowOn(){
     const admin = document.querySelector('#admin')
-    admin.style.border = "2px solid blue"
+    admin.style.border = "2px solid #23049D"
     // admin.style.boxShadow = "0 0 10px 5px green"
 }
 
+//record screen
+let shouldStop = false;
+let stopped = false;
+// const videoElement = document.getElementsByTagName("video")[0];
+const stopButton = document.getElementById('stop')
+function startRecord() {
+    console.log('recording started')
+    const downloadLink = document.getElementsByClassName('header1')[0]
+    const stopDiv = document.getElementsByClassName('header2')[0]
+    const record = document.getElementById('record')
+    record.disabled = true
+    stopDiv.style.display = 'flex'
+    downloadLink.style.display = 'none'
+}
+function stopRecord() {
+    const downloadLink = document.getElementsByClassName('header1')[0]
+    const stopDiv = document.getElementsByClassName('header2')[0]
+    const record = document.getElementById('record')
+    record.disabled = false
+    stopDiv.style.display = 'none'
+    downloadLink.style.display = 'flex'
+}
 
+const audioRecordConstraints = {
+    echoCancellation: true
+}
+
+stopButton.addEventListener('click', function () {
+    shouldStop = true;
+});
+
+const handleRecord = function ({stream, mimeType}) {
+    startRecord()
+    let recordedChunks = [];
+    stopped = false;
+    const mediaRecorder = new MediaRecorder(stream);
+
+    mediaRecorder.ondataavailable = function (e) {
+        if (e.data.size > 0) {
+            recordedChunks.push(e.data);
+        }
+
+        if (shouldStop === true && stopped === false) {
+            mediaRecorder.stop();
+            stopped = true;
+        }
+    };
+
+    mediaRecorder.onstop = function () {
+        const downButton = document.getElementById('download')
+        const blob = new Blob(recordedChunks, {
+            type: mimeType
+        });
+        recordedChunks = []
+        const filename = window.prompt('Enter file name');
+        downButton.href = URL.createObjectURL(blob);
+        downButton.download = `${filename || 'recording'}.webm`;
+        stopRecord();
+        // videoElement.srcObject = null;
+    };
+
+    mediaRecorder.start(200);
+};
+
+async function recordScreen() {
+    const mimeType = 'video/webm';
+    shouldStop = false;
+    const constraints = {
+        video: {
+            cursor: 'motion'
+        }
+    };
+    if(!(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia)) {
+        return window.alert('Screen Record not supported!')
+    }
+    let stream = null;
+    const displayStream = await navigator.mediaDevices.getDisplayMedia({video: {cursor: "motion"}, audio: {'echoCancellation': true}});
+    if(window.confirm("Record audio with screen?")){
+        const voiceStream = await navigator.mediaDevices.getUserMedia({ audio: {'echoCancellation': true}, video: false });
+        let tracks = [...displayStream.getTracks(), ...voiceStream.getAudioTracks()]
+        stream = new MediaStream(tracks);
+        handleRecord({stream, mimeType})
+    } else {
+        stream = displayStream;
+        handleRecord({stream, mimeType});
+    };
+    // videoElement.srcObject = stream;
+}
+
+const cross = document.getElementsByClassName('icons')[0]
+cross.addEventListener('click', function(){
+    const downloadLink = document.getElementsByClassName('header1')[0]
+    downloadLink.style.display = 'none'
+})
