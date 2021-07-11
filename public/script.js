@@ -4,7 +4,6 @@ const videoGrid = document.getElementById('video-grid')
 const peer = new Peer(undefined, {
     secure: true,
     host: 'pj20.herokuapp.com',
-    // path: '/myapp',
     port: '443',
     key: 'peerjs'
 })
@@ -15,16 +14,14 @@ let myVideoStream
 let count = 0
 const peers = {}
 
-//test
 let currentPeer = [];
 let userlist = [];
 let cUser;
-//test
 
-// //enter name
+
+//enter name
 let myName = prompt('Type Your Name');
-// // let bar = confirm('Confirm or deny');
-// console.log(YourName);
+
 
 navigator.mediaDevices.getUserMedia({
     video: true,
@@ -43,7 +40,7 @@ navigator.mediaDevices.getUserMedia({
                 call.on('stream', userVideoStream => {
                     if(e.userId == myId)
                     addVideoStream(video, e.name, e.userId, userVideoStream)
-                    //test
+                    
                     socket.emit('participants')
                     socket.on('participant-list', users =>{
                         removeAll()
@@ -52,33 +49,18 @@ navigator.mediaDevices.getUserMedia({
                         })
                         console.log(users)
                     })
-                    //test
                 });
             });
         })
-        currentPeer.push(call.peerConnection);
-        console.log("jaa rha hai!", call) //test
-        //test2
+        currentPeer.push(call.peerConnection)
     })
-    
-    //code for appending participants
-    // socket.emit('participants')
-    // socket.on('participant-list', users =>{
-    //     removeAll()
-    //     users.forEach(e => {
-    //         appendParticipant(e.name)
-    //     })
-    //     console.log(users)
-    // })
 
     socket.on('user-connected', (userId, name) => {
         setTimeout(() => {
             connectToNewUser(userId, name, stream)
         }, 1000)
-        // count++
+        
         console.log(name)
-        // console.log(count)
-        // adjust(count)
         console.log('user connected: ' + userId)
     })
 })
@@ -91,10 +73,6 @@ socket.on('user-disconnected', user => {
     console.log('user disconnected: ', user.userId)
     const left = document.getElementById(`${user.userId}`)
     left.parentNode.removeChild(left);
-    // left.querySelectorAll('*').forEach(n => n.remove());
-    // const user = document.getElementById(name)
-    // user.remove()
-    //test
     socket.emit('participants')
     socket.on('participant-list', users =>{
         removeAll()
@@ -103,11 +81,10 @@ socket.on('user-disconnected', user => {
         })
         console.log(users)
     })
-    //test
 })
 
 peer.on('open', id => {
-    cUser = id; //test
+    cUser = id; 
     console.log(cUser);
     socket.emit('join-room', room_id, id, myName)
 })
@@ -117,7 +94,6 @@ function connectToNewUser(userId, name, stream) {
     const video = document.createElement('video')
     call.on('stream', userVideoStream => {
         addVideoStream(video, name, userId, userVideoStream)
-        //test
         socket.emit('participants')
         socket.on('participant-list', users =>{
             removeAll()
@@ -126,7 +102,6 @@ function connectToNewUser(userId, name, stream) {
             })
             console.log(users)
         })
-        //test
     })
     call.on('close', () => {
         video.remove()
@@ -134,7 +109,7 @@ function connectToNewUser(userId, name, stream) {
 
     peers[userId] = call
     currentPeer.push(call.peerConnection)
-    console.log("sahi jaa rha hai!", call) //test
+    console.log("sahi jaa rha hai!", call) 
 }
 
 function addVideoStream(video, name, divId, stream) {
@@ -144,12 +119,10 @@ function addVideoStream(video, name, divId, stream) {
             video.play()
         })
         let videoContainer = document.createElement('div')
-        // videoContainer.setAttribute("id", name)
         videoContainer.setAttribute("id", divId)
         videoContainer.classList.add("video-container")
         videoContainer.append(video)
         let nameEl = document.createElement('div')
-        // nameEl.setAttribute("id", name)
         nameEl.className = "userName"
         nameEl.innerHTML = name
         videoContainer.append(nameEl)
@@ -187,7 +160,6 @@ const setOffButton = () => {
 }
 
 // mute and unmute
-
 muteUnmute.onclick = async () => {
     const enabled = myVideoStream.getAudioTracks()[0].enabled;
     if (enabled) {
@@ -233,72 +205,6 @@ const share = () => {
     alert('Meeting Link Copied');
 }
 
-//screen sharing
-//   const shareScreen = document.getElementById('shareScreen')
-//   const video = document.createElement('video');
-//   video.setAttribute("id", "screenShare")
-
-//   function handleSuccess(stream) {
-//     startButton.disabled = true;
-//     // const video = document.querySelector('video');
-//     video.srcObject = stream
-//     video.addEventListener('loadedmetadata', () => {
-//         video.play()
-//     })
-//     shareScreen.append(video)
-
-//     // demonstrates how to detect that the user has stopped
-//     // sharing the screen via the browser UI.
-//     stream.getVideoTracks()[0].addEventListener('ended', () => {
-//         startButton.disabled = false;
-//         video.remove()
-//         video.srcObject = null;
-//     });
-//   }
-
-//   function handleError(error) {
-//     errorMsg(`getDisplayMedia error: ${error.name}`, error);
-//   }
-
-//   function errorMsg(msg, error) {
-//     const errorElement = document.querySelector('#errorMsg');
-//     errorElement.innerHTML += `<p>${msg}</p>`;
-//     if (typeof error !== 'undefined') {
-//       console.error(error);
-//     }
-//   }
-
-//   const startButton = document.getElementById('startButton');
-//   startButton.addEventListener('click', () => {
-//     navigator.mediaDevices.getDisplayMedia({video: true})
-//         .then(handleSuccess, handleError);
-//   });
-
-//   if ((navigator.mediaDevices && 'getDisplayMedia' in navigator.mediaDevices)) {
-//     startButton.disabled = false;
-//   } else {
-//     errorMsg('getDisplayMedia is not supported');
-//   }
-
-//   function addShareStream(video, stream){
-//     video.srcObject = stream
-//     video.addEventListener('loadedmetadata', () => {
-//         video.play()
-//     })
-//     shareScreen.append(video)
-// }
-
-// function connectToNewScreen(userId, stream){
-//     const call = peer.call(userId, stream)
-//     const video = document.createElement('video')
-//     call.on('stream', userVideoStream => {
-//         addShareStream(video, userVideoStream)
-//     })
-//     call.on('close', () => {
-//         video.remove()
-//     })
-// }
-
 //leave meeting
 const disconnect = document.getElementById('disconnect');
 
@@ -342,10 +248,7 @@ const screenshare = () => {
             let sender = currentPeer[x].getSenders().find(function (s) {
                 return s.track.kind == videoTrack.kind;
             })
-            //    console.log(sender);
-            //    console.log(currentPeer)
             sender.replaceTrack(videoTrack);
-            //    localVideo.classList.add('fullScreen')
         }
 
     })
@@ -401,15 +304,10 @@ const messageContainer = document.getElementById('allMessages')
 const messageInput = document.getElementById('chat')
 const userContainer = document.getElementById('names')
 socket.emit('new-user', myName)
-// appendParticipant(myName)
+
 socket.on('chat-message', data =>{
     appendMessage(`${data.name}: ${data.message}`)
 })
-
-// socket.on('user-joined', name =>{
-//     console.log(name)
-//     appendParticipant(name)
-// })
 
 messageInput.addEventListener('keyup', function(event){
     if(event.keyCode === 13){
@@ -504,11 +402,9 @@ socket.on('raise-hand', user =>{
     if(check4){
         appendRaiseHand(user.name)
         border.style.border = "2px solid #F7FD04"
-        // border.style.boxShadow = "0 0 10px 5px yellow"
     }else{
         removeRaiseHand(user.name)
         border.style.border = "none"
-        // border.style.boxShadow = "none"
     }
 })
 var check5 = false
@@ -530,7 +426,6 @@ function appendRaiseHand(name){
     hand.setAttribute("class", "bi bi-hand-index-fill")
     hand.setAttribute("id", name+"-hand")
     hand.style.color = "#f1f1f1"
-    // hand.innerText = 'raised'
     position.append(hand)
 }
 
@@ -561,8 +456,7 @@ const raiseHandDown = () => {
 //glow around speaking candidate
 var recognizing = true;
 const audioButton = document.getElementById('muteUnmute')
-// const admin = document.querySelector('.video-container')
-// var check4 = true
+
 if(!('webkitSpeechRecognition' in window)){
     upgrade()
 }else{
@@ -573,16 +467,12 @@ if(!('webkitSpeechRecognition' in window)){
     recognition.onstart = function() {
         recognizing = false;
         console.log(true)
-        // change(true)
     };
 
     recognition.onend = function() {
         recognizing = true;
-        // admin.className = ''
-        // admin.className = 'video-container none'
         socket.emit('remove-glow-around')
         glowOff()
-        // change(false)
       };
     
       recognition.onresult = function(event) {
@@ -590,31 +480,24 @@ if(!('webkitSpeechRecognition' in window)){
         console.log(true) 
         for (var i = event.resultIndex; i < event.results.length; ++i) {
             if (event.results[i].isFinal) {
-                // admin.className = ''
-                // admin.className = 'video-container none'
                 socket.emit('remove-glow-around')
                 glowOff()
             } else {
-                // admin.className = ''
-                // admin.className = 'video-container test'
                 socket.emit('send-glow-around')
                 glowOn()
             }
         }
-        // change(true)
     };
 }
 socket.on('glow-around', user =>{
     const border = document.getElementById(user.userId)
     border.style.border = "2px solid #23049D"
-    // border.style.boxShadow = "0 0 10px 5px green"
 })
 
 socket.on('no-glow-around', user => {
     const border = document.getElementById(user.userId)
     if(border)
     border.style.border = "none"
-    // border.style.boxShadow = "none"
 })
 
 audioButton.addEventListener('click', e => {
@@ -624,8 +507,6 @@ audioButton.addEventListener('click', e => {
     }else{
         recognition.start();
     }
-    // e.preventDefault()
-    // socket.emit('send-glow-around')
 })
 if(recognizing){
     recognition.start();
@@ -634,19 +515,16 @@ if(recognizing){
 function glowOff(){
     const admin = document.querySelector('#admin')
     admin.style.border = "none"
-    // admin.style.boxShadow = "none"
 }
 
 function glowOn(){
     const admin = document.querySelector('#admin')
     admin.style.border = "2px solid #23049D"
-    // admin.style.boxShadow = "0 0 10px 5px green"
 }
 
 //record screen
 let shouldStop = false;
 let stopped = false;
-// const videoElement = document.getElementsByTagName("video")[0];
 const stopButton = document.getElementById('stop')
 function startRecord() {
     console.log('recording started')
@@ -701,7 +579,6 @@ const handleRecord = function ({stream, mimeType}) {
         downButton.href = URL.createObjectURL(blob);
         downButton.download = `${filename || 'recording'}.webm`;
         stopRecord();
-        // videoElement.srcObject = null;
     };
 
     mediaRecorder.start(200);
@@ -729,7 +606,6 @@ async function recordScreen() {
         stream = displayStream;
         handleRecord({stream, mimeType});
     };
-    // videoElement.srcObject = stream;
 }
 
 const cross = document.getElementsByClassName('icons')[0]
