@@ -65,7 +65,8 @@
             <% } %>
         </div>
         <div id="newMessage">
-            <a href="#" onclick="showRooms()">+</a>
+            <a class="plus" href="#" onclick="showRooms()">+</a>
+            <a href="/logout"><button class="logout">Logout</button></a>
         </div>
         <div id="chatTitle">
             <span><% if(isRoom){ %> <%=  rooms[roomId] %> <% }else{ %> Click on a Room <% } %></span>

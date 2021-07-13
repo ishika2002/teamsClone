@@ -108,8 +108,7 @@ body{
 }
 
 #newMessage{
-    display: grid;
-    grid: 40px / 40px;
+    display: flex;
     align-content: center;
     grid-area: newMessage;
     border-top: 1px solid rgba(0, 0, 0, 0.25);
@@ -117,7 +116,9 @@ body{
     padding: 0 15px;
 }
 
-#newMessage a{
+#newMessage .plus{
+    margin: auto 2px;
+    padding: 10px;
     display: grid;
     place-content: center center;
     background: #eee;
@@ -125,6 +126,7 @@ body{
     color: #FC6D6D;
     text-decoration: none;
     font-size: 3.6rem;
+    height: 40px;
 }
 
 #chatTitle, #chatForm{
@@ -288,4 +290,15 @@ body{
     margin-right: 10px;
     margin-top: 10px;
     cursor: pointer;
+}
+.logout{
+    margin: 18px 30px;
+    height: 40px;
+    width: 150px;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 5px;
+    background-color: rgb(52, 63, 79);
+    color: white;
 }
