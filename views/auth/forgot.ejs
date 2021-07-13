@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= pageTitle %></title>
+    <style>
+        .msg{
+            padding: 10px;
+            margin: auto;
+            margin-bottom: 20px;
+            background-color: rgb(196, 196, 48);
+            color: white;
+            border: 2px solid yellow;
+            border-radius: 5px;
+            width: 200px;
+            text-align: center;
+        }
+        input{
+            margin-bottom: 10px;
+        }
+        .box{
+            margin:auto;
+            padding: 10px;
+            width: 500px;
+            text-align: center;
+            border: 2px solid gray;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>Recover Acccount</h1>
+        <% if(msg){ %>
+            <div class="msg"><%= msg %></div>
+        <% } %>
+        <form action="/forgot" method="post">
+            <input required autocomplete type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" name="email" placeholder="Email"><br><br>
+            <input type="submit" value="Send Mail">
+        </form>
+        <br>
+        <a href="/login">Back to Login</a>
+    </div>
+</body>
+</html>

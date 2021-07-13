@@ -20,7 +20,7 @@ let cUser;
 
 
 //enter name
-let myName = prompt('Type Your Name');
+let myName = name;
 
 
 navigator.mediaDevices.getUserMedia({
@@ -209,7 +209,7 @@ const share = () => {
 const disconnect = document.getElementById('disconnect');
 
 disconnect.onclick = async () => {
-    window.location = "/";
+    window.location = "/chat";
 }
 
 //screen share
@@ -305,7 +305,7 @@ const messageInput = document.getElementById('chat')
 const userContainer = document.getElementById('names')
 socket.emit('new-user', myName)
 
-socket.on('chat-message', data =>{
+socket.on('receive-message', data =>{
     appendMessage(`${data.name}: ${data.message}`)
 })
 
@@ -319,7 +319,7 @@ messageSend.addEventListener('click', e => {
     e.preventDefault()
     const message = messageInput.value
     appendMessage(`You: ${message}`)
-    socket.emit('send-chat-message', message)
+    socket.emit('send-message', true, {message, name: myName}, room_id)
     messageInput.value = ''
 }) 
 

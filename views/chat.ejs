@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/chat.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <script src="/socket.io/socket.io.js" defer></script>
+    <script>
+        const isRoom = "<%= isRoom %>";
+        const name = "<%= user.name %>";
+        <% if(isRoom){ %>
+            const room_id = "<%= roomId %>";
+        <% } %>
+        
+        <% if(msg != ''){ %>
+            alert("<%= msg %>");
+        <% } %>
+    </script>
+    <script defer src="/client.js"></script>
+    <title>Chat</title>
+</head>
+
+<body>
+    <div id="room-container1">
+        <h1 class="label">Create Room</h1>
+        <div class="input_login" style="margin-top: 20px;">
+            <form action="/room-create" method="POST">
+                <!-- <div class="font font2" style="text-align: center;">Enter room name</div> -->
+                <input required autocomplete type="text" name="roomName" id="roomName" placeholder="Room name">
+                <button class="btn btn-dark" type="submit">Create</button>
+            </form>
+            <div class="font font2" style="margin-top: 20px; text-align: center;">Or Join one</div>
+            <button class="btn btn-dark" type="submit" onclick="joinRooms()" style="margin-top: 5px;">Join</button>
+        </div>
+    </div>
+    <div id="room-container2">
+        <div class="cross" onclick="cross()">x</div>
+        <h1 class="label">Join Room</h1>
+        <div class="input_login" style="margin-top: 25px;">
+            <form action="/room-join" method="POST">
+                <div class="font font2">Enter room ID</div>
+                <input required autocomplete type="text" name="roomId" placeholder="Room ID">
+                <button class="btn btn-dark" type="submit">Join</button>
+            </form>
+        </div>
+    </div>
+    <div id="chat-container">
+        <div id="search">
+            <h4>Rooms</h4>
+        </div>
+        <div id="conversationList">
+            <% for (const key in rooms) { %>
+                <a href="/chat/<%= key %>">
+                    <div class="convo">
+                        <div class="roomName">
+                            <%= rooms[key] %>
+                        </div>
+                    </div>
+                </a>
+            <% } %>
+        </div>
+        <div id="newMessage">
+            <a href="#" onclick="showRooms()">+</a>
+        </div>
+        <div id="chatTitle">
+            <span><% if(isRoom){ %> <%=  rooms[roomId] %> <% }else{ %> Click on a Room <% } %></span>
+            <!-- <button id="joinMeet">Video Call</button> -->
+            <% if(isRoom){ %>
+            <i class="bi bi-camera-video-fill" id="joinMeet" onclick="joinMeet()"></i>
+            <% } %>
+        </div>
+        <div id="chatMessage">
+            
+            
+                <% if(isRoom){
+                    for(let i = chats.length-1;i>=0;i--){
+                        if(chats[i].name != user.name){
+                %>
+                <div id="yourMsg" class="msg left">
+                    <div class="text"><%= chats[i].message %></div>
+                    <div class="name"><%= chats[i].name %></div>
+                    <div class="time"><%= chats[i].ts %></div>
+                </div>
+                <%
+                        }else{
+                %>
+                <div id="yourMsg" class="msg right">
+                    <div class="text"><%= chats[i].message %></div>
+                    <div class="name"><%= chats[i].name %></div>
+                    <div class="time"><%= chats[i].ts %></div>
+                </div>
+                <%
+                        }
+                    }
+                }
+                %>
+            </div>
+            <!-- <div id="myMsg" class="msg right">
+                <% if(isRoom){
+                    for(let i =0;i<chats.length;i++){
+                        if(chats[i].name == user.name){
+                %>
+                <div class="text"><%= chats[i].message %></div>
+                <div class="name"><%= chats[i].name %></div>
+                <div class="time"><%= chats[i].ts %></div>
+                <%
+                        }
+                    }
+                }
+                %>
+            </div> -->
+            <div id="chatForm">
+                <i class="bi bi-paperclip" onclick="copyRoomId()" style="cursor: pointer;"></i>
+                <input type="text" id="msgInput" placeholder="type a message">
+                <button type="submit" id="sendMsg" style="display: none;">Send</button>
+            </div>
+        </div>
+        
+    </div>
+</body>
+
+</html>

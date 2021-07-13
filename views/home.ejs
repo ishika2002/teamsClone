@@ -20,27 +20,11 @@
             <li><span>Collaborations</span></li>
         </ul>
     </div>
-    <div class="container"> 
+    <div class="container2"> 
         <div class="instantMeet">     
-            <h5>Start Instant Meeting</h5>
-            <a href="/create"><button class="btn btn-dark" id="createRoom">Create Room</button></a>  
-        </div>
-        <div class="meetingCode">
-            <h5>Enter Meeting Code</h5>
-            <form action="/join" class="input_form">
-                <input id="callInput" name="callInput"/>
-                <button class="btn btn-dark" id="joinRoom" type="submit">Join Room</button>
-            </form>
+            <h5>Login To Continue</h5>
+            <a href="/login"><button class="btn btn-dark" id="createRoom">Login</button></a>  
         </div>
     </div>
 </body>
-<script>
-    const callInput =  document.getElementById('callInput')
-    const joinRoom = document.getElementById('joinRoom')
-
-    joinRoom.addEventListener('click', function(e){
-        e.preventDefault()
-        window.location.replace(callInput.value)
-    })
-</script>
 </html>
