@@ -166,7 +166,7 @@ userIo.on('connection', socket => {
     })
 })
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
 
 //Server listening on port and mongoose connect
 mongoose
