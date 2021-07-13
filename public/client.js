@@ -81,7 +81,7 @@ if (isRoom) {
         window.location = "/" + room_id;
     }
 
-    function copyRoomId() {
+    function copyRoomId(){
         var share = document.createElement('input')
         document.body.appendChild(share);
         share.value = room_id;
