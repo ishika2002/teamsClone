@@ -103,10 +103,7 @@ userIo.on('connection', socket => {
     })
 
     socket.on('send-message', (isVC, message, room) => {
-        if(isVC){
-            
-        var i = userS.indexOf(socket.id);
-        }else{
+
         console.log(room)
         const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
         const d = new Date();
@@ -124,8 +121,7 @@ userIo.on('connection', socket => {
                 roomi.chat.push(newMessage)
                 roomi.save();
             })
-        }
-        
+
         // socket.broadcast.emit('chat-message', { message: message, name: userI[i].name })
         socket.to(room).emit('receive-message', message)
     })
