@@ -1,0 +1,1 @@
+module.exports = 'mongodb+srv://User1:user1@cluster.2qq0q.mongodb.net/meetDB?retryWrites=true&w=majority';

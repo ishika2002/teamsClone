@@ -107,7 +107,7 @@ dist
 .tern-port
 
 # mongoDB Creds
-mongoURI.js
+# mongoURI.js
 
 # mail Creds
 mailCreds.js
